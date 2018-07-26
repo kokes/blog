@@ -51,4 +51,14 @@ with gzip.open(body, 'rt') as gf:
 
 Again, memory consumption never surpassed 35 megs, despite processing hundreds of megs of data. Cool, this seems to work just fine.
 
+One last thing, you might want to be a good citizen and close the HTTP stream explicitly. The garbage collector will trigger `__del__` eventually and this probably calls `.close` on `body`, but let's not depend on that. We can either call `body.close()` when we're done, or we can use the wonderful [contextlib](https://docs.python.org/3/library/contextlib.html), which can handle closing your objects, all they need is to implement the `close` method.
+
+```
+from contextlib import closing
+
+body = obj['Body']
+with closing(body):
+    # use `body`
+```
+
 Happy streaming.
