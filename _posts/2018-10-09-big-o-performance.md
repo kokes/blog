@@ -1,5 +1,5 @@
 ---
-title: "Big-O doesn't mean performance can differ greatly"
+title: "Big-O doesn't mean performance cannot differ greatly"
 date: 2018-10-09T12:03:53+02:00
 draft: false
 ---
