@@ -217,6 +217,8 @@ BenchmarkCast-4                	2000000000	         0.48 ns/op
 
 Yeah, well, this is doing barely anything, so it's understandable, that you could do this 2 billion times. Per second.
 
+**Caveat: here I'm assuming that the producer and consumer have the same architecture, so while with the solutions above, you could potentially tweak the endianness settings, this solution does not give you that luxury and you may end up reading garbage.**
+
 ## Conclusion
 
 While there is tons of conventional wisdom about performance, it's always good to benchmark things yourself. I was quite glad to see that operating on raw bytes is quite fast and in combination with the `binary` package it's quite safe as well. And sure, there's still the lightspeed option of casting that array, but that's usually not an option, since the underlying byte array tends to change (e.g. in a buffered read from a file), so we're just asking for trouble there.
