@@ -4,6 +4,8 @@ date: 2018-07-26T12:03:53+02:00
 draft: false
 ---
 
+**UPDATE (19/3/2019): Since writing this blogpost, a new method has been added to the `StreamingBody` class... and that's `iter_lines`. So if you have boto3 version [1.7.47 and higher](https://github.com/boto/boto3/blob/develop/CHANGELOG.rst#1747) you don't have to go through all the finicky stuff below. Or if you don't mind an extra dependency, you can use [smart_open](https://github.com/RaRe-Technologies/smart_open) and never look back.**
+
 Being quite fond of streaming data even if it's from a static file, I wanted to employ this on data I had on S3. I have previously streamed a lot of network-based data via Python, but S3 was a fairly new avenue for me. I thought I'd just get an object representation that would behave like a fileobj and I'd just loop it. Not quite. But not too bad either.
 
 I googled around at first, but the various tips and tricks around the internets offered incomplete advice, but I managed to piece it together. First, I set up an S3 client and looked up an object.
