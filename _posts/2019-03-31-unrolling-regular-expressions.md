@@ -14,7 +14,7 @@ One last thing before we get started - only experiment with things in this post 
 
 **tl;dr: You can gain [100X or more](#benchmarks-summary) by replacing regular expressions with funcionally equivalent explicit lookups. This has the cost of being less explicit, so only use it in performance critical pieces of code.**
 
-## Setup
+## Setup
 
 Let's take a dataset that doesn't fit into my CPU caches, I chose this [list of tweets](https://github.com/fivethirtyeight/russian-troll-tweets/) and I'll scan the file for matches of a few strings.
 
