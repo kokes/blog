@@ -80,6 +80,8 @@ I ran a regression on letter positions, it looked roughly like this:
 score = intercept + a_pos + b_pos + c_pos + ... + y_pos + z_pos + error
 ```
 
+The idea works like this: I assume the model does something like a [Levenshtein distance calculation](https://en.wikipedia.org/wiki/Levenshtein_distance), so if `abcd` is the true string, `abdc` is better than `badc`, because the former requires only one swap. From this insight, I should be able to model individual letter positions - if `a` is supposed to be at the very end, the model will score those strings were `a` is towards the end of the string, other things being equal (which is the regression proposition). Then, the estimated parameters will tell me where the individual letters should be positioned in order to get maximum score.
+
 I tried simple OLS, bits of logistic regression... to no avail. Well, I had some info from the model, but not nearly enough to go on. We'll get to my failing of this approach later on.
 
 ### My fourth go - correct regression
