@@ -1,7 +1,6 @@
 ---
 title: "Assorted tech links #7"
 date: 2019-10-14T07:03:53+02:00
-draft: true
 ---
 
 I do quite a bit of reading and watching of tech talks and since I often forget things, I decided to turn this into a sort of bookmarking service.
