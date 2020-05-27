@@ -1,6 +1,6 @@
 ---
 title: "Assorted tech links #4"
-date: 2020-05-27T07:03:53+02:00
+date: 2020-05-27T07:03:55+02:00
 ---
 
 I do quite a bit of reading and watching of tech talks and since I often forget things, I decided to turn this into a sort of bookmarking service.
