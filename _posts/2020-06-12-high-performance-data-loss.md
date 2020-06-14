@@ -800,7 +800,7 @@ Let's see, we'd guess 2.5, right? Maybe 2 since there's a missing value. But eng
 
 ```python
 schema = t.StructType([t.StructField('name', t.StringType(), True), t.StructField('age', t.IntegerType(), True)])
-df = spark.read.option('inferSchema', True).option('header', True).schema(schema).csv(fn)
+df = spark.read.option('header', True).schema(schema).csv(fn)
 df.agg(f.mean('age')).show()
 ```
 
@@ -820,7 +820,7 @@ for _ in range(2):
     pandas.read_csv('data/trick.csv').head(1000).to_csv('data/trick.csv') # lossless, right?
 
     # this is the exact same code as above
-    df = spark.read.option('inferSchema', True).option('header', True).schema(schema).csv(fn)
+    df = spark.read.option('header', True).schema(schema).csv(fn)
     df.agg(f.mean('age')).show()
 ```
 
