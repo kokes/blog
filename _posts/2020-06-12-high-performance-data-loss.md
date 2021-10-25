@@ -4,7 +4,7 @@ date: 2020-06-12T07:03:53+02:00
 ---
 
 
-**This article reflects software as it was stable at the time of writing (June 2020). There are some ongoing changes, pending releases etc. that will fix some of these issues. I reported many of these and will edit the article if they get resolved.**
+**This article reflects software as it was stable at the time of writing (June 2020) and was later updated (in October 2021) to note changes merged in Spark 3 and Spark 3.2.0, two big updates that fixes some of the issues noted here. As always, software gets updated and the remaining issues may get resolved by the time you read this.**
 
 When talking about data loss, we usually mean some traditional ways of losing data, many of which are related to databases:
 
@@ -172,6 +172,8 @@ df.show()
 
 Turns out we don't get either of those three sensible results, dates overflow into the following month, which, to me, is pretty insane.
 
+**Update (October 2021): This has since been fixed and these invalid dates no longer get inferred as dates, but as strings instead (using Spark 3.2.0)**
+
 Let's try and hint that we have dates in our data. At this point only the first two options apply: error or null.
 
 
@@ -202,6 +204,12 @@ df.show()
 
 
 And yet... nothing, still overflows.
+
+**Update (October 2021): This, again, has been fixed in Spark 3.0 and the exception this triggers nicely says so, even letting you know how you can revert to its past behaviour.**
+
+```
+You may get a different result due to the upgrading of Spark 3.0: Fail to parse '2019-02-30' in the new parser. You can set spark.sql.legacy.timeParserPolicy to LEGACY to restore the behavior before Spark 3.0, or set to CORRECTED and treat it as an invalid datetime string.
+```
 
 Let's see what pandas does (type inference is not shown here, but pandas just assumes they are plain strings in that case). It errs as expected. This way we don't lose anything and we're forced to deal with the issue.
 
@@ -283,6 +291,8 @@ Which just about sums up the issues raised earlier - it's more common to return 
 
 The major issue with this is that not only is it wrong... the result is also a perfectly valid date, so the usual mechanisms for detecting issues - looking for nulls, infinities, warnings etc. - none of that works, because the output looks just fine.
 
+**Update (October 2021): This is partially resolved in [SPARK-35030](https://issues.apache.org/jira/browse/SPARK-35030) with the introduction of ANSI SQL compliance. This is, however, turned off by default, see [its docs](https://spark.apache.org/docs/latest/sql-ref-ansi-compliance.html) for more details.**
+
 ### Fun tidbit - Spark overflows time as well
 
 In case you were wondering, you can place garbage into time as well, it will overflow like dates. (And just like the date issue, it will get addressed in Spark 3.0.)
@@ -340,6 +350,7 @@ df.show()
     +----+-------------------+
     
 
+**Update (October 2021): As noted, this has since been addressed and it's no longer an issue in Spark 3.**
 
 ### Funner tidbit - casting is different
 
@@ -379,6 +390,7 @@ df.select(f.col('date').cast('date')).show()
     +----------+
     
 
+**Update (October 2021): Spark 3.2.0 has a new ANSI SQL compliance mode (`spark.sql.ansi.enabled`). If you turn it on (it's off by default), it will trigger an exception in this case.**
 
 ### Integer overflows
 
@@ -480,6 +492,8 @@ spark.read.schema(schema).option('header', True).csv('data/null_row.csv').show()
 The crazy thing that just happened is that just because `c`'s second value is a float instead of an integer, Spark decided to _throw away the whole row_ - so if you're filtering/aggregating on other columns, your analysis is already wrong now (this did bite us _hard_ at work).
 
 Luckily, this gets fixed in the upcoming major version of Spark (3.0, couldn't find the ticket just now, but it does get resolved) and only that one single value is NULLed.
+
+**Update (October 2021): this has been been fixed in Spark 3.**
 
 Also, like with some (sadly, not all) of the issues described here, you can catch these nasty bugs by turning the permissiveness down (mode=FAILFAST in the case of file I/O).
 
